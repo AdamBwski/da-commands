@@ -1,5 +1,5 @@
 {
-  "name": "AdamBwski/da-commands",
+  "name": "adambwski/da-commands",
   "description": "Bunch of DirectAdmin commands wrapped around GuzzleHttp client.",
   "minimum-stability": "dev",
   "license": "MIT",
