@@ -11,7 +11,7 @@ namespace DirectAdminCommands;
 use DirectAdminCommands\Exception\BadCredentialsException;
 use DirectAdminCommands\Exception\MalformedRequestException;
 use GuzzleHttp\Client;
-use GuzzleHttp\Message\ResponseInterface;
+use GuzzleHttp\Psr7\Response;
 
 /**
  * Class CommandAbstract
@@ -88,13 +88,7 @@ abstract class CommandAbstract
     public function impersonate($clientName)
     {
         $this->clientName = $clientName;
-        $this->client->setDefaultOption(
-            'auth',
-            [
-                $clientName ? join('|', [$this->adminName, $clientName]) : $this->adminName,
-                $this->adminPassword
-            ]
-        );
+        $this->client = $this->getClient();
 
         return $this;
     }
@@ -112,15 +106,8 @@ abstract class CommandAbstract
         if (!$this->command) {
             throw new \BadMethodCallException('No command specified');
         }
-        $this->response = $this->client->send(
-            $this->client->createRequest(
-                $this->method,
-                '/' . $this->command,
-                [
-                    'query' => $params
-                ]
-            )
-        );
+
+        $this->response = $this->client->request($this->method, '/' . $this->command, ['query' => $params]);
 
         $this->validateResponse();
     }
@@ -130,13 +117,15 @@ abstract class CommandAbstract
      */
     protected function validateResponse()
     {
-        if ($this->response->getHeader('Content-Type') === 'text/html'
-            && $this->response->getHeader('X-DirectAdmin') === 'unauthorized'
+        $contentType = $this->response->getHeaderLine('Content-Type');
+        if ($contentType === 'text/html'
+            && strtolower($this->response->getHeaderLine('X-DirectAdmin')) === 'unauthorized'
         ) {
             throw new BadCredentialsException(
                 sprintf(
-                    'Bad credentials! Could not login as "%s" with "***" at "%s"',
+                    'Bad credentials! Could not login as "%s" with "%s" at "%s"',
                     $this->clientName ? join('|', [$this->adminName, $this->clientName]) : $this->adminName,
+                    $this->adminPassword,
                     $this->url
                 )
             );

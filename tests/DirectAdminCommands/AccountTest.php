@@ -59,9 +59,9 @@ class AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateExistingAdmin()
     {
-        $command = new \DirectAdminCommands\Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
+        $command = new Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
         $command->create(
-            new \DirectAdminCommands\ValueObject\AdminAccountSpec(
+            new ValueObject\AdminAccountSpec(
                 ADMIN_USERNAME, TEST_EMAIL, ADMIN_PASSWORD, false
             )
         );
@@ -79,7 +79,7 @@ class AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testListAdministrators()
     {
-        $command = new \DirectAdminCommands\Account(DIRECTADMIN_URL, ADMIN_USERNAME, ADMIN_PASSWORD);
+        $command = new Account(DIRECTADMIN_URL, ADMIN_USERNAME, ADMIN_PASSWORD);
         $result = $command->listAdmins();
         $this->assertContains(MASTER_ADMIN_USERNAME, $result, false);
         $this->assertContains(ADMIN_USERNAME, $result, false);
@@ -90,7 +90,7 @@ class AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testImpersonateAdmin()
     {
-        $command = new \DirectAdminCommands\Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
+        $command = new Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
         $command->impersonate(ADMIN_USERNAME);
         $result = $command->loginTest();
         $this->assertTrue($result, 'Could not impersonate admin: ' . ADMIN_USERNAME);
@@ -102,7 +102,7 @@ class AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidAccountSpec()
     {
-        $command = new \DirectAdminCommands\Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
+        $command = new Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
         $command->impersonate(ADMIN_USERNAME);
         $invalidAccount = new InvalidAccountSpec('', '', '', false);
         $command->create($invalidAccount);
@@ -113,13 +113,13 @@ class AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateResellerFromParameters()
     {
-        $resellerData = new \DirectAdminCommands\ValueObject\ResellerCustomAccountSpec(
+        $resellerData = new ValueObject\ResellerCustomAccountSpec(
             RESELLER_USERNAME,
             TEST_EMAIL,
             RESELLER_PASSWORD,
             false,
             TEST_RESELLER_DOMAIN,
-            \DirectAdminCommands\ValueObject\ResellerAccountSpec::ACCOUNT_IP_SHARED,
+            ValueObject\ResellerAccountSpec::ACCOUNT_IP_SHARED,
             INF,
             INF,
             INF,
@@ -146,10 +146,10 @@ class AccountTest extends PHPUnit_Framework_TestCase
             false,
             false,
             false,
-            \DirectAdminCommands\ValueObject\ResellerAccountSpec::CUSTOM_DNS_OFF,
+            ValueObject\ResellerAccountSpec::CUSTOM_DNS_OFF,
             true
         );
-        $command = new \DirectAdminCommands\Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
+        $command = new Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
         $command->impersonate(ADMIN_USERNAME);
         $result = $command->create($resellerData);
         $this->assertTrue($result);
@@ -160,7 +160,7 @@ class AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testImpersonateReseller()
     {
-        $command = new \DirectAdminCommands\Account(DIRECTADMIN_URL, ADMIN_USERNAME, ADMIN_PASSWORD);
+        $command = new Account(DIRECTADMIN_URL, ADMIN_USERNAME, ADMIN_PASSWORD);
         $command->impersonate(RESELLER_USERNAME);
         $result = $command->loginTest();
         $this->assertTrue($result, 'Could not impersonate as reseller');
@@ -171,7 +171,7 @@ class AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateUserFromParameters()
     {
-        $userData = new \DirectAdminCommands\ValueObject\UserCustomAccountSpec(
+        $userData = new ValueObject\UserCustomAccountSpec(
             USER_USERNAME,
             TEST_EMAIL,
             USER_PASSWORD,
@@ -200,7 +200,7 @@ class AccountTest extends PHPUnit_Framework_TestCase
             false,
             false
         );
-        $command = new \DirectAdminCommands\Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
+        $command = new Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
         $command->impersonate(RESELLER_USERNAME);
         $result = $command->create($userData);
         $this->assertTrue($result);
@@ -211,7 +211,7 @@ class AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testListResellers()
     {
-        $command = new \DirectAdminCommands\Account(DIRECTADMIN_URL, ADMIN_USERNAME, ADMIN_PASSWORD);
+        $command = new Account(DIRECTADMIN_URL, ADMIN_USERNAME, ADMIN_PASSWORD);
         $result = $command->listResellers();
         $this->assertContains(RESELLER_USERNAME, $result);
     }
@@ -230,7 +230,7 @@ class AccountTest extends PHPUnit_Framework_TestCase
     public function testSuspendAccount()
     {
         $this->markTestSkipped('CMD_API_SELECT_USERS does not work!');
-        $command = new \DirectAdminCommands\Account(DIRECTADMIN_URL, ADMIN_USERNAME, ADMIN_PASSWORD);
+        $command = new Account(DIRECTADMIN_URL, ADMIN_USERNAME, ADMIN_PASSWORD);
         $result = $command->suspend(RESELLER_USERNAME);
         $this->assertTrue($result, 'Could not suspend account');
     }
@@ -241,7 +241,7 @@ class AccountTest extends PHPUnit_Framework_TestCase
     public function testResumeAccount()
     {
         $this->markTestSkipped('CMD_API_SELECT_USERS does not work!');
-        $command = new \DirectAdminCommands\Account(DIRECTADMIN_URL, ADMIN_USERNAME, ADMIN_PASSWORD);
+        $command = new Account(DIRECTADMIN_URL, ADMIN_USERNAME, ADMIN_PASSWORD);
         $result = $command->resume(RESELLER_USERNAME);
         $this->assertTrue($result, 'Could not resume account');
     }
@@ -251,7 +251,7 @@ class AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteUser()
     {
-        $command = new \DirectAdminCommands\Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
+        $command = new Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
         $command->impersonate(RESELLER_USERNAME);
         $result = $command->delete(USER_USERNAME);
         $this->assertTrue($result, 'Could not delete user account');
@@ -263,7 +263,7 @@ class AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteReseller()
     {
-        $command = new \DirectAdminCommands\Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
+        $command = new Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
         $command->impersonate(ADMIN_USERNAME);
         $result = $command->delete(RESELLER_USERNAME);
         $this->assertTrue($result, 'Could not delete reseller account');
@@ -276,7 +276,7 @@ class AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteAdmin()
     {
-        $command = new \DirectAdminCommands\Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
+        $command = new Account(DIRECTADMIN_URL, MASTER_ADMIN_USERNAME, MASTER_ADMIN_PASSWORD);
         $result = $command->delete(ADMIN_USERNAME);
         $this->assertTrue($result, 'Could not delete admin account: ' . ADMIN_USERNAME);
     }

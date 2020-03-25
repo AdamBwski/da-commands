@@ -23,12 +23,12 @@ use DirectAdminCommands\ValueObject\UserAccountSpec;
 class Account extends CommandAbstract
 {
     /**
-     * @param \DirectAdminCommands\ValueObject\AccountSpec $accountSpec
+     * @param AccountSpec $accountSpec
      *
      * @return bool
-     * @throws \DirectAdminCommands\Exception\BadCredentialsException
-     * @throws \DirectAdminCommands\Exception\GenericException
-     * @throws \DirectAdminCommands\Exception\MalformedRequestException
+     * @throws BadCredentialsException
+     * @throws GenericException
+     * @throws MalformedRequestException
      */
     public function create(AccountSpec $accountSpec)
     {
@@ -42,7 +42,7 @@ class Account extends CommandAbstract
         } elseif ($accountSpec instanceof UserAccountSpec) {
             $this->command = 'CMD_API_ACCOUNT_USER';
         } else {
-            throw new \UnexpectedValueException(
+            throw new UnexpectedValueException(
                 'Account specification should be one of: AdminAccountSpec, ResellerAccountSpec, UserAccountSpec'
             );
         }
@@ -56,9 +56,9 @@ class Account extends CommandAbstract
      * @param string $username
      *
      * @return bool
-     * @throws \DirectAdminCommands\Exception\BadCredentialsException
-     * @throws \DirectAdminCommands\Exception\GenericException
-     * @throws \DirectAdminCommands\Exception\MalformedRequestException
+     * @throws BadCredentialsException
+     * @throws GenericException
+     * @throws MalformedRequestException
      */
     public function delete($username)
     {
@@ -120,7 +120,7 @@ class Account extends CommandAbstract
      * @param $accountName string
      *
      * @return bool
-     * @throws \DirectAdminCommands\Exception\GenericException
+     * @throws GenericException
      */
     public function exists($accountName)
     {
@@ -253,9 +253,9 @@ class Account extends CommandAbstract
      * @param string $username
      *
      * @return bool
-     * @throws \DirectAdminCommands\Exception\BadCredentialsException
-     * @throws \DirectAdminCommands\Exception\GenericException
-     * @throws \DirectAdminCommands\Exception\MalformedRequestException
+     * @throws BadCredentialsException
+     * @throws GenericException
+     * @throws MalformedRequestException
      */
     public function suspend($username)
     {
@@ -280,9 +280,9 @@ class Account extends CommandAbstract
      * @param string $username
      *
      * @return bool
-     * @throws \DirectAdminCommands\Exception\BadCredentialsException
-     * @throws \DirectAdminCommands\Exception\GenericException
-     * @throws \DirectAdminCommands\Exception\MalformedRequestException
+     * @throws BadCredentialsException
+     * @throws GenericException
+     * @throws MalformedRequestException
      */
     public function resume($username)
     {
@@ -307,7 +307,7 @@ class Account extends CommandAbstract
      * @throws BadCredentialsException
      * @throws Exception\MalformedRequestException
      * @throws GenericException
-     * @throws \Exception
+     * @throws Exception
      */
     public function addTemporaryBandwidth($username, $bandwidth)
     {
