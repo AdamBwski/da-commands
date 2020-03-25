@@ -1,5 +1,5 @@
 {
-  "name": "nexces/directadmin-commands",
+  "name": "AdamBwski/da-commands",
   "description": "Bunch of DirectAdmin commands wrapped around GuzzleHttp client.",
   "minimum-stability": "dev",
   "license": "MIT",
